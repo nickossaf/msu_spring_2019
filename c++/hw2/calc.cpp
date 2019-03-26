@@ -1,10 +1,13 @@
 #include<iostream>
 #include<cstdlib>
 #include<string>
+#include <stdexcept>
 
 class Calculator{
 private:
-    int ERROR_KEY = 2147483647;
+    std::string buffer;
+    int pntr = 0;
+    int buffer_len;
 
     void tab(){
         while(pntr < buffer_len){
@@ -25,7 +28,7 @@ private:
         tab();
 
         if(buffer[pntr] <= '0' || buffer[pntr] >= '9'){
-            return ERROR_KEY;
+            throw std::invalid_argument("Missed operator");
         }
 
         while(buffer[pntr] >= '0' && buffer[pntr] <= '9'){
@@ -39,7 +42,7 @@ private:
         return ans * sign;
     }
     int getAddition(){
-        int number = ERROR_KEY;
+        int number = 0;
         int ans = getMultiplication();
         tab();
 
@@ -54,14 +57,13 @@ private:
                 ans -= number;
             }
 
-            if(number == ERROR_KEY) return ERROR_KEY;
             tab();
         }
 
         return ans;
     }
     int getMultiplication(){
-        int number = ERROR_KEY;
+        int number = 1;
         int ans = getNumber();
         tab();
 
@@ -73,11 +75,10 @@ private:
             } else if(buffer[pntr] == '/'){
                 pntr++;
                 number = getNumber();
-                if(number == 0) return ERROR_KEY;
+                if(number == 0) throw std::invalid_argument("Division by zero");
                 ans /= number;
             }
 
-            if(number == ERROR_KEY) return ERROR_KEY;
             tab();
         }
 
@@ -86,21 +87,14 @@ private:
 
 public:
 
-    std::string buffer;
-    int pntr;
-    int buffer_len;
-
-    int parser(){
-        int ans = 0;
+    int parser(std::string const& buff){
+        buffer = buff;
+        pntr = 0;
         buffer_len = buffer.length();
+        int ans = 0;
 
         tab();
         ans = getAddition();
-
-        if(ans == ERROR_KEY){
-            std::cout << "error";
-            return 1;
-        }
 
         std::cout << ans;
         return 0;
@@ -114,9 +108,14 @@ int main(int argc, char* argv[]){
     }
 
     Calculator calc;
-    calc.buffer = argv[1];;
-    calc.pntr = 0;
 
-    return calc.parser();
+    try {
+        calc.parser(argv[1]);
+    } catch(const std::invalid_argument& e){
+        std::cout << "error";
+        return 1;
+    }
+
+    return 0;
 
 }
