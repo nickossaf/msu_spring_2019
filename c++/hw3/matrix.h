@@ -12,7 +12,7 @@ public:
         len(l),
         data(beginP){
             if(data == nullptr) data = new int[len];
-        }
+    }
 
     const int& operator[](unsigned int i) const{
         if(i >= len) throw std::out_of_range("");
