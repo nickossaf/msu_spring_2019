@@ -10,9 +10,7 @@ public:
 
     Row(unsigned int l = 1, int* beginP = nullptr):
         len(l),
-        data(beginP){
-            if(data == nullptr) data = new int[len];
-    }
+        data(beginP){}
 
     const int& operator[](unsigned int i) const{
         if(i >= len) throw std::out_of_range("");
@@ -40,11 +38,11 @@ public:
         delete[] data;
     }
 
-    int getRows(){
+    unsigned int getRows(){
         return rows;
     }
 
-    int getColumns(){
+    unsigned int getColumns(){
         return columns;
     }
 
