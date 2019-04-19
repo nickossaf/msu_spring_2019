@@ -26,35 +26,33 @@ public:
     }
 
 private:
-    // process использует variadic templates
+    // process ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГІ variadic templates
 
     std::ostream& out_;
 
     template <class T, class... Args>
     Error process(T&& val, Args&&... args){
-        if(process(val) == Error::CorruptedArchive) return Error::CorruptedArchive;
+        if(process(std::forward<T>(val)) == Error::CorruptedArchive) return Error::CorruptedArchive;
         return process(std::forward<Args>(args)...);
     }
 
     Error process(bool& value){
         if (value == true)
             out_ << "true" << Separator;
-
         else if (value == false)
             out_ << "false" << Separator;
-        else
-            return Error::CorruptedArchive;
-
+        
         return Error::NoError;
     }
 
     Error process(uint64_t& value){
-        if (value >= 0 && value <= std::numeric_limits<uint64_t>::max())
-            out_ << value << Separator;
-        else
-            return Error::CorruptedArchive;
-
+        out_ << value << Separator;
         return Error::NoError;
+    }
+    
+    template <class T>
+    Error process(T&& value){
+        return Error::CorruptedArchive;
     }
 
 };
@@ -79,7 +77,7 @@ private:
 
     template <class T, class... Args>
     Error process(T&& val, Args&&... args){
-        if(process(val) == Error::CorruptedArchive) return Error::CorruptedArchive;
+        if(process(std::forward<T>(val)) == Error::CorruptedArchive) return Error::CorruptedArchive;
         return process(std::forward<Args>(args)...);
     }
 
