@@ -52,7 +52,7 @@ private:
     
     template <class T>
     Error process(T&& value){
-        return Error::CorruptedArchive;
+        return Error::CorruptedArchive; //wrong argumen to read
     }
 
 };
