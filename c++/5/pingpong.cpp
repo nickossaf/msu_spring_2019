@@ -7,11 +7,12 @@ std::mutex m;
 int counter = 0;
 
 void ping(){
-    while(counter < MAX_N){
-        if(counter % 2 == 0 && m.try_lock()){
+    while(counter < MAX_N - 1){
+        if(counter % 2 == 0){
+            std::lock_guard<std::mutex> lock(m);
+            //std::cout << counter << std::endl;
             std::cout << "ping" << std::endl;
             counter++;
-            m.unlock();
         }
         std::this_thread::yield();
     }
@@ -19,10 +20,11 @@ void ping(){
 
 void pong(){
     while(counter < MAX_N){
-        if(counter % 2 == 1 && m.try_lock()){
+        if(counter % 2 == 1){
+            std::lock_guard<std::mutex> lock(m);
+            //std::cout << counter << std::endl;
             std::cout << "pong" << std::endl;
             counter++;
-            m.unlock();
         }
         std::this_thread::yield();
     }
