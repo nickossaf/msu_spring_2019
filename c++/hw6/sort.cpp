@@ -7,8 +7,8 @@
 #include<condition_variable>
 
 // решение: сортировка пузырьком, один поток читает, а второй выводит; 
-// выводим не в бинарный файл т.к. про формат нового файла в условии 
-//ничего не сказано;
+// выводим не в бинарный файл, т.к. про формат нового файла в условии 
+// ничего не сказано;
 
 
 uint64_t counter = 0;
@@ -16,7 +16,6 @@ std::mutex m;
 std::condition_variable dataReady;
 bool ready = false;
 bool allarm = false;
-uint64_t x_prodused = 0;
 
 void countN(std::string const& ifilename) {
 	for (uint64_t x = 0; x < 100; x++) {
@@ -62,6 +61,6 @@ int main() {
 
 	t1.join();
 	t2.join();
-	//_sleep(100000);
+
 	return 0;
 }
