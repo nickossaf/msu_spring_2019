@@ -18,7 +18,7 @@ bool ready = false;
 bool allarm = false;
 
 void countN(std::string const& ifilename) {
-	for (uint64_t x = 0; x < 100; x++) {
+	for (uint64_t x = 0; x <= std::numeric_limits<uint64_t>::max(); x++) {
 		std::unique_lock<std::mutex> lock(m);
 		while (!allarm) dataReady.wait(lock);
 		counter = 0;
@@ -38,7 +38,7 @@ void countN(std::string const& ifilename) {
 
 void writeX(std::string const& ofilename) {
 	std::ofstream out(ofilename, std::ios_base::app);
-	for (uint64_t x = 0; x < 100; x++) {
+	for (uint64_t x = 0; x <= std::numeric_limits<uint64_t>::max(); x++) {
 		std::unique_lock<std::mutex> lock(m);
 		allarm = true;
 		dataReady.notify_one();
